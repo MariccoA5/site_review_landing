@@ -20,3 +20,14 @@ flutter:
   assets:
     - assets/Icon-blue-gradient.png
     - assets/telecom.jpg
+    - assets/Icon-orange-yellow.png
+    - assets/Icon-orange.png
+
+  fonts:
+    - family: IBM Plex Mono
+      fonts:
+        - asset: assets/fonts/IBMPlexMono-Regular.ttf
+        - asset: assets/fonts/IBMPlexMono-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/IBMPlexMono-Italic.ttf
+          style: italic
