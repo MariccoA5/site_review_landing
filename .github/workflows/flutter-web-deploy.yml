@@ -3,16 +3,19 @@ name: Build and Deploy Flutter Web App to Netlify
 on:
   push:
     branches:
-      - main  # This will trigger the action on every push to the main branch
+      - main  # Trigger on push to the main branch
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true  # Force the use of Node.js 20
+
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3  # No changes needed, will automatically update to Node.js 20
+        uses: actions/checkout@v3
 
       # Step 2: Set up Flutter environment
       - name: Set up Flutter
@@ -36,24 +39,27 @@ jobs:
           path: build/web
 
   deploy:
-    needs: build  # Ensure the deploy job runs after the build job is successful
+    needs: build
     runs-on: ubuntu-latest
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true  # Force the use of Node.js 20
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # No changes needed
+        uses: actions/checkout@v3
 
-      # Step 6: Set up Node.js (explicitly using Node.js 20)
+      # Set up Node.js 20 for Netlify CLI
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      # Step 7: Install Netlify CLI
+      # Step 6: Install Netlify CLI
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
 
-      # Step 8: Deploy to Netlify
+      # Step 7: Deploy to Netlify
       - name: Deploy to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
