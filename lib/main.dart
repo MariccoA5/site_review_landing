@@ -25,7 +25,7 @@ class LandingPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header (Replacing AppBar)
+            // App bar
             Container(
               height: 80,
               color: Colors.white,
@@ -95,14 +95,13 @@ class LandingPage extends StatelessWidget {
                 ],
               ),
             ),
-
+            // Title for the landing page
             // Stack with the background image and content
             Stack(
               children: [
-                // Background image
                 Container(
                   width: double.infinity,
-                  height: 725,
+                  height: 685,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/telecom.jpg'),
@@ -116,14 +115,14 @@ class LandingPage extends StatelessWidget {
                   left: MediaQuery.sizeOf(context).width * 0.29,
                   top: MediaQuery.sizeOf(context).height * 0.2,
                   child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width * 0.3,
+                    width: MediaQuery.sizeOf(context).width * 0.35,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Moto (Product 50-character statement)
+                        // Moto 
                         const Text(
-                          'Accelerate, Simplify, & Generate closeout reports',
+                          'Accelerate, Simplify,\nCloseout Reports',
                           style: TextStyle(
                             fontSize: 56,
                             color: Colors.black,
@@ -131,9 +130,9 @@ class LandingPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
 
-                        // Product Description
+                        // Description
                         const Text(
-                          'Site Review is the quickest way for technicians to generate closeout reports,\ncutting out wasted time, and eliminating site revisits.',
+                          'Site Review is the quickest way for technicians to generate closeout reports, cutting out wasted time, and eliminating site revisits.',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
@@ -199,26 +198,31 @@ class LandingPage extends StatelessWidget {
             SizedBox(
               height: 120, // Adjust height for logos
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
+
+                
                 children: [
                   // GRC Logo
-                  Container(
-                    width: 100,
-                    height: 100,
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Image.asset('assets/GRC Logo.png'),
                     ),
-                    child: Image.asset('assets/GRC Logo.png'),
                   ),
 
                   // American Tower Logo
@@ -245,9 +249,8 @@ class LandingPage extends StatelessWidget {
             ),
 
             // Seamless transition to the feature cards
-            const SizedBox(height: 40),
+
             Container(
-              color: Colors.grey[200],
               padding: const EdgeInsets.symmetric(vertical: 40),
               child: Column(
                 children: [
@@ -263,7 +266,7 @@ class LandingPage extends StatelessWidget {
                     ),
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       _buildFeatureCard('Custom Workflows', Icons.settings,
                           'Create custom workflows in minutes tailored to your company’s needs.'),
@@ -385,7 +388,7 @@ class LandingPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 20),
 
-                      // Social Media Icons (You can add more if needed)
+                      
                       IconButton(
                         icon: const Icon(Icons.facebook, color: Colors.white),
                         iconSize: 50,
@@ -435,43 +438,46 @@ class LandingPage extends StatelessWidget {
 
   // Helper method to build feature cards
   Widget _buildFeatureCard(String title, IconData icon, String description) {
-    return Container(
-      width: 250,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 40, color: Colors.deepOrange),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      child: Container(
+        width: 250,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
             ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            description,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[700],
+          ],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 40, color: Colors.deepOrange),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 10),
+            Text(
+              description,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[700],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
