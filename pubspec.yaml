@@ -22,6 +22,12 @@ flutter:
     - assets/telecom.jpg
     - assets/Icon-orange-yellow.png
     - assets/Icon-orange.png
+    - assets/GRC Logo.png
+    - assets/americantower_logo.jpg
+    - assets/atc_monopole_tower.jpg
+    - assets/atc_self-support_tower.jpg
+
+    - assets/Googleplay.png
 
   fonts:
     - family: IBM Plex Mono
