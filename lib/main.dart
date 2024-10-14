@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+Future<void> main() async {
+  await Supabase.initialize(
+    url: 'https://wtzgjzinkqbxnierobum.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind0emdqemlua3FieG5pZXJvYnVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc2NzI4NDUsImV4cCI6MjA0MzI0ODg0NX0.dBzXj8ULNUenZSFAb6MsSjp9rksCVM_pB476XtQMVjU',
+  );
   runApp(const MainApp());
 }
+
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -37,7 +43,7 @@ class LandingPage extends StatelessWidget {
                       Image.asset('assets/Icon-orange.png', width: 50),
                       const SizedBox(width: 10),
                       const Text(
-                        'Site Review',
+                        'Field Report',
                         style: TextStyle(
                           fontFamily: 'IBM Plex Mono',
                           color: Colors.deepOrange,
@@ -132,7 +138,7 @@ class LandingPage extends StatelessWidget {
 
                         // Description
                         const Text(
-                          'Site Review is the quickest way for technicians to generate closeout reports, cutting out wasted time, and eliminating site revisits.',
+                          'Field Report is the quickest way for technicians to generate closeout reports, cutting out wasted time, and eliminating revisits.',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.black,
@@ -199,56 +205,15 @@ class LandingPage extends StatelessWidget {
               height: 120, // Adjust height for logos
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-
                 
                 children: [
-                  // GRC Logo
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Image.asset('assets/GRC Logo.png'),
-                    ),
-                  ),
-
-                  // American Tower Logo
-                  Container(
-                    width: 100,
-                    height: 100,
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Image.asset('assets/americantower_logo.jpg'),
-                  ),
+                  
+                  trustedLogos('assets/GRC Logo.png'),
+                  trustedLogos('assets/americantower_logo.jpg'),
+                  
                 ],
               ),
             ),
-
-            // Seamless transition to the feature cards
 
             Container(
               padding: const EdgeInsets.symmetric(vertical: 40),
@@ -295,7 +260,7 @@ class LandingPage extends StatelessWidget {
                           Image.asset('assets/Icon-orange.png', width: 50),
                           const SizedBox(width: 10),
                           const Text(
-                            'Site Review',
+                            'Field Report',
                             style: TextStyle(
                               fontFamily: 'IBM Plex Mono',
                               color: Colors.deepOrange,
@@ -359,24 +324,24 @@ class LandingPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // App Store Icon
-                      IconButton(
-                        icon: Image.asset(''),
-                        iconSize: 50,
-                        onPressed: () {
-                          // Handle App Store link
-                        },
-                      ),
-                      const SizedBox(width: 20),
+                      // IconButton(
+                      //   icon: Image.asset(''),
+                      //   iconSize: 50,
+                      //   onPressed: () {
+                      //     // Handle App Store link
+                      //   },
+                      // ),
+                      // const SizedBox(width: 20),
 
-                      // Google Play Icon
-                      IconButton(
-                        icon: Image.asset('assets/Googleplay.png'),
-                        iconSize: 50,
-                        onPressed: () {
-                          // Handle Google Play link
-                        },
-                      ),
-                      const SizedBox(width: 20),
+                      // // Google Play Icon
+                      // IconButton(
+                      //   icon: Image.asset('assets/Googleplay.png'),
+                      //   iconSize: 50,
+                      //   onPressed: () {
+                      //     // Handle Google Play link
+                      //   },
+                      // ),
+                      // const SizedBox(width: 20),
 
                       // Email Icon
                       IconButton(
@@ -396,22 +361,7 @@ class LandingPage extends StatelessWidget {
                           // Handle Facebook link
                         },
                       ),
-                      const SizedBox(width: 20),
-                      IconButton(
-                        icon: const Icon(Icons.computer_outlined, color: Colors.white),
-                        iconSize: 50,
-                        onPressed: () {
-                          // Handle Twitter link
-                        },
-                      ),
-                      const SizedBox(width: 20),
-                      IconButton(
-                        icon: const Icon(Icons.computer, color: Colors.white),
-                        iconSize: 50,
-                        onPressed: () {
-                          // Handle LinkedIn link
-                        },
-                      ),
+                      
                     ],
                   ),
 
@@ -420,7 +370,7 @@ class LandingPage extends StatelessWidget {
                   // Footer Copyright Info
                   const Center(
                     child: Text(
-                      '© 2024 Site Review. All rights reserved.',
+                      '© 2024 Field Report. All rights reserved.',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -432,6 +382,30 @@ class LandingPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Padding trustedLogos(String logo) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+      child: Container(
+        width: 125,
+        height: 125,
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Image.asset(logo),
       ),
     );
   }
