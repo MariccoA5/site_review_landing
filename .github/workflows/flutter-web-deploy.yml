@@ -12,7 +12,7 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # No changes needed, will automatically update to Node.js 20
 
       # Step 2: Set up Flutter environment
       - name: Set up Flutter
@@ -28,7 +28,7 @@ jobs:
       - name: Build Flutter web
         run: flutter build web
 
-      # Step 5: Upload build files as artifact (optional, for debugging or archiving purposes)
+      # Step 5: Upload build files as artifact (optional)
       - name: Upload Build as Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -41,13 +41,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # No changes needed
 
-      # Step 6: Deploy to Netlify using Netlify CLI
+      # Step 6: Set up Node.js (explicitly using Node.js 20)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Step 7: Install Netlify CLI
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
 
-      # Step 7: Deploy to Netlify
+      # Step 8: Deploy to Netlify
       - name: Deploy to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
