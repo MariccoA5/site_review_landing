@@ -4,11 +4,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 Future<void> main() async {
   await Supabase.initialize(
     url: 'https://wtzgjzinkqbxnierobum.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind0emdqemlua3FieG5pZXJvYnVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc2NzI4NDUsImV4cCI6MjA0MzI0ODg0NX0.dBzXj8ULNUenZSFAb6MsSjp9rksCVM_pB476XtQMVjU',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind0emdqemlua3FieG5pZXJvYnVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc2NzI4NDUsImV4cCI6MjA0MzI0ODg0NX0.dBzXj8ULNUenZSFAb6MsSjp9rksCVM_pB476XtQMVjU',
   );
   runApp(const MainApp());
 }
-
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -22,13 +22,49 @@ class MainApp extends StatelessWidget {
   }
 }
 
-class LandingPage extends StatelessWidget {
-  const LandingPage({super.key});
+class LandingPage extends StatefulWidget {
+  const LandingPage({Key? key}) : super(key: key);
+
+  @override
+  _LandingPageState createState() => _LandingPageState();
+}
+
+class _LandingPageState extends State<LandingPage> {
+  final TextEditingController _emailController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  final GlobalKey _aboutUsKey = GlobalKey();
+  final GlobalKey _featuresKey = GlobalKey();
+
+  final ScrollController _scrollController = ScrollController();
+
+
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToSection(GlobalKey key) {
+  final context = key.currentContext;
+  if (context != null) {
+    Scrollable.ensureVisible(
+      context,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: [
             // App bar
@@ -62,24 +98,157 @@ class LandingPage extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text(
-                          'Features',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
+                      InkWell(
+                        onTap: () => _scrollToSection(_featuresKey),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            'Features',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      
                       const SizedBox(width: 8),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // Pop up a contact form using showDialog
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // Create a GlobalKey for the form
+                              final _formKey = GlobalKey<FormState>();
+                              // Create TextEditingControllers for each input field
+                              final TextEditingController _nameController =
+                                  TextEditingController();
+                              final TextEditingController _emailController =
+                                  TextEditingController();
+                              final TextEditingController _messageController =
+                                  TextEditingController();
+
+                              return AlertDialog(
+                                title: const Text('Contact Us'),
+                                content: Form(
+                                  key: _formKey,
+                                  child: SingleChildScrollView(
+                                    // To prevent overflow if the content is too long
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Text(
+                                            'Please fill out the form below and we will contact you soon.'),
+                                        const SizedBox(height: 20),
+                                        TextFormField(
+                                          controller: _nameController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Name',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your name';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                        const SizedBox(height: 10),
+                                        TextFormField(
+                                          controller: _emailController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Email',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter your email';
+                                            }
+                                            // Basic email validation
+                                            if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                                .hasMatch(value)) {
+                                              return 'Please enter a valid email';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                        const SizedBox(height: 10),
+                                        TextFormField(
+                                          controller: _messageController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Message',
+                                            border: OutlineInputBorder(),
+                                          ),
+                                          maxLines: 3,
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return 'Please enter a message';
+                                            }
+                                            return null;
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      // Close the dialog
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        // Handle form submission
+                                        String name = _nameController.text;
+                                        String email = _emailController.text;
+                                        String message =
+                                            _messageController.text;
+
+                                        // For now, just print the values
+                                        print('Name: $name');
+                                        print('Email: $email');
+                                        print('Message: $message');
+
+                                        // Clear the input fields
+                                        _nameController.clear();
+                                        _emailController.clear();
+                                        _messageController.clear();
+
+                                        // Close the dialog
+                                        Navigator.of(context).pop();
+
+                                        // Show a confirmation message
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                              content: Text(
+                                                  'Thank you! We will contact you soon.')),
+                                        );
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.deepOrange,
+                                    ),
+                                    child: const Text('Submit'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepOrange,
                           padding: const EdgeInsets.symmetric(
@@ -126,7 +295,7 @@ class LandingPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Moto 
+                        // Moto
                         const Text(
                           'Accelerate, Simplify,\nCloseout Reports',
                           style: TextStyle(
@@ -146,38 +315,69 @@ class LandingPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
 
-                        // Buttons
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 14,
+                        Form(
+                          key: _formKey,
+                          child: Row(
+                            children: [
+                              // Email Input Field
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _emailController,
+                                  decoration: const InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white24,
+                                    hintText: 'Enter your email',
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 0,
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your email';
+                                    }
+                                    // Simple email validation regex
+                                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                        .hasMatch(value)) {
+                                      return 'Please enter a valid email';
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ),
-                              child: const Text(
-                                'Learn More',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.deepOrange,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 14,
+                              const SizedBox(width: 10),
+                              // Submit Button
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    // Collect the email and print to console
+                                    String email = _emailController.text;
+                                    print('Collected email: $email');
+                                    // Clear the input field
+                                    _emailController.clear();
+                                    // Show a confirmation message
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Thank you! We will contact you soon.')),
+                                    );
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.deepOrange,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 14,
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Join waitlist',
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                              child: const Text(
-                                'Contact Us',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -186,37 +386,8 @@ class LandingPage extends StatelessWidget {
               ],
             ),
 
-            // Title for the company logos section
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              child: Text(
-                'We’re working closely with these companies',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-
-            // Section for company logos
-            SizedBox(
-              height: 120, // Adjust height for logos
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                
-                children: [
-                  
-                  trustedLogos('assets/GRC Logo.png'),
-                  trustedLogos('assets/americantower_logo.jpg'),
-                  
-                ],
-              ),
-            ),
-
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 40),
+              key: _featuresKey,
               child: Column(
                 children: [
                   const Padding(
@@ -283,17 +454,24 @@ class LandingPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Text(
-                              'Features',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                           Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: InkWell(
+                            onTap: () => _scrollToSection(_featuresKey),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(
+                                'Features',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
+                          ),
+                          
                           const SizedBox(width: 8),
                           ElevatedButton(
                             onPressed: () {},
@@ -319,55 +497,7 @@ class LandingPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 40), // Space between sections
 
-                  // Icons for App Store, Google Play, Email, Social Media
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // App Store Icon
-                      // IconButton(
-                      //   icon: Image.asset(''),
-                      //   iconSize: 50,
-                      //   onPressed: () {
-                      //     // Handle App Store link
-                      //   },
-                      // ),
-                      // const SizedBox(width: 20),
-
-                      // // Google Play Icon
-                      // IconButton(
-                      //   icon: Image.asset('assets/Googleplay.png'),
-                      //   iconSize: 50,
-                      //   onPressed: () {
-                      //     // Handle Google Play link
-                      //   },
-                      // ),
-                      // const SizedBox(width: 20),
-
-                      // Email Icon
-                      IconButton(
-                        icon: const Icon(Icons.email, color: Colors.white),
-                        iconSize: 50,
-                        onPressed: () {
-                          // Handle email link
-                        },
-                      ),
-                      const SizedBox(width: 20),
-
-                      
-                      IconButton(
-                        icon: const Icon(Icons.facebook, color: Colors.white),
-                        iconSize: 50,
-                        onPressed: () {
-                          // Handle Facebook link
-                        },
-                      ),
-                      
-                    ],
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Footer Copyright Info
+      
                   const Center(
                     child: Text(
                       '© 2024 Field Report. All rights reserved.',
@@ -382,30 +512,6 @@ class LandingPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Padding trustedLogos(String logo) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-      child: Container(
-        width: 125,
-        height: 125,
-        padding: const EdgeInsets.all(8.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Image.asset(logo),
       ),
     );
   }
